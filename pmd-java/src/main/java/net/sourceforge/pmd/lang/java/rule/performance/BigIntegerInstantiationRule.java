@@ -33,6 +33,7 @@ public class BigIntegerInstantiationRule extends AbstractJavaRule {
         }
 
         boolean jdk15 = ((RuleContext) data).getLanguageVersion().compareToVersion("1.5") >= 0;
+        boolean jdk9 = jdk15 && ((RuleContext) data).getLanguageVersion().compareToVersion("9") >= 0;
         if ((TypeTestUtil.isA(BigInteger.class, (ASTClassOrInterfaceType) type)
                 || jdk15 && TypeTestUtil.isA(BigDecimal.class, (ASTClassOrInterfaceType) type))
                 && !node.hasDescendantOfType(ASTArrayDimsAndInits.class)) {
@@ -49,7 +50,7 @@ public class BigIntegerInstantiationRule extends AbstractJavaRule {
                     img = img.substring(1, img.length() - 1);
                 }
 
-                if ("0".equals(img) || "1".equals(img) || jdk15 && "10".equals(img)) {
+                if ("0".equals(img) || "1".equals(img) || jdk9 && "2".equals(img) || jdk15 && "10".equals(img)) {
                     addViolation(data, node);
                     return data;
                 }
